@@ -61,6 +61,7 @@ export interface ExecutionState {
 	isPaused: boolean
 	currentLine?: number
 	consoleLogs: ConsoleLog[]
+	playbackSpeed: number
 }
 
 export interface CodeSample {

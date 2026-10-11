@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import App from '../App'
 
 describe('App Component', () => {
@@ -78,5 +78,20 @@ describe('App Component', () => {
 		).toBeInTheDocument()
 		expect(screen.getByText('ES2022 Runtime')).toBeInTheDocument()
 		expect(screen.getByText('Microtask Queue')).toBeInTheDocument()
+	})
+
+	it('should render and switch workspace layout tabs', async () => {
+		const { container } = render(<App />)
+
+		expect(screen.getByText('Overview')).toHaveClass('active')
+		expect(screen.getByText('Editor')).toBeInTheDocument()
+		expect(screen.getByText('Queues')).toBeInTheDocument()
+		expect(screen.getByText('Console')).toBeInTheDocument()
+
+		const editorTab = screen.getByText('Editor')
+		fireEvent.click(editorTab)
+
+		expect(editorTab).toHaveClass('active')
+		expect(container.querySelector('.main-grid')).toHaveClass('view-editor')
 	})
 })

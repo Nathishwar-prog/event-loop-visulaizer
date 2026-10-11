@@ -7,6 +7,8 @@ interface AppStore extends ExecutionState {
 	samples: CodeSample[]
 	currentSample?: CodeSample
 
+	playbackSpeed: number
+
 	setCode: (code: string) => void
 	loadSample: (sample: CodeSample) => void
 	play: () => void
@@ -14,6 +16,7 @@ interface AppStore extends ExecutionState {
 	step: () => void
 	back: () => void
 	reset: () => void
+	setPlaybackSpeed: (speed: number) => void
 	addConsoleLog: (
 		message: string,
 		type?: 'info' | 'warn' | 'error' | 'success',
@@ -31,6 +34,7 @@ const initialState: ExecutionState = {
 	isPaused: false,
 	currentLine: undefined,
 	consoleLogs: [],
+	playbackSpeed: 1,
 }
 
 const codeSamples: CodeSample[] = [
@@ -324,6 +328,7 @@ export const useAppStore = create<AppStore>((set, get) => {
 
 			set({ isRunning: true, isPaused: false })
 
+			const intervalMs = Math.round(1500 / (state.playbackSpeed || 1))
 			playIntervalId = setInterval(() => {
 				const currentState = get()
 				if (!currentState.isRunning || currentState.isPaused) {
@@ -338,7 +343,30 @@ export const useAppStore = create<AppStore>((set, get) => {
 				}
 
 				get().step()
-			}, 1500)
+			}, intervalMs)
+		},
+
+		setPlaybackSpeed: (speed: number) => {
+			const safeSpeed = Math.max(0.25, Math.min(speed, 5))
+			set({ playbackSpeed: safeSpeed })
+			const state = get()
+			if (state.isRunning && !state.isPaused) {
+				stopPlayback()
+				const intervalMs = Math.round(1500 / safeSpeed)
+				playIntervalId = setInterval(() => {
+					const currentState = get()
+					if (!currentState.isRunning || currentState.isPaused) {
+						stopPlayback()
+						return
+					}
+					if (currentState.currentStep >= currentState.steps.length) {
+						stopPlayback()
+						set({ isRunning: false })
+						return
+					}
+					get().step()
+				}, intervalMs)
+			}
 		},
 
 		pause: () => {
@@ -367,6 +395,7 @@ export const useAppStore = create<AppStore>((set, get) => {
 				code: state.code,
 				steps: state.steps,
 				currentSample: state.currentSample,
+				playbackSpeed: state.playbackSpeed,
 				consoleLogs: [],
 			})
 		},

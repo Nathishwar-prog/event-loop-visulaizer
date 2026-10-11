@@ -1,22 +1,44 @@
-import { ArrowLeft, ArrowRight, Pause, Play, RotateCcw } from 'lucide-react'
+import {
+	ArrowLeft,
+	ArrowRight,
+	Gauge,
+	Pause,
+	Play,
+	RotateCcw,
+} from 'lucide-react'
 import { useAppStore } from '../store'
 import { useShallow } from 'zustand/react/shallow'
 
+const SPEEDS = [0.5, 1, 1.5, 2] as const
+
 export const ExecutionControls = () => {
-	const { isRunning, isPaused, currentStep, steps, play, pause, step, back, reset } =
-		useAppStore(
-			useShallow((state) => ({
-				isRunning: state.isRunning,
-				isPaused: state.isPaused,
-				currentStep: state.currentStep,
-				steps: state.steps,
-				play: state.play,
-				pause: state.pause,
-				step: state.step,
-				back: state.back,
-				reset: state.reset,
-			})),
-		)
+	const {
+		isRunning,
+		isPaused,
+		currentStep,
+		steps,
+		playbackSpeed,
+		play,
+		pause,
+		step,
+		back,
+		reset,
+		setPlaybackSpeed,
+	} = useAppStore(
+		useShallow((state) => ({
+			isRunning: state.isRunning,
+			isPaused: state.isPaused,
+			currentStep: state.currentStep,
+			steps: state.steps,
+			playbackSpeed: state.playbackSpeed ?? 1,
+			play: state.play,
+			pause: state.pause,
+			step: state.step,
+			back: state.back,
+			reset: state.reset,
+			setPlaybackSpeed: state.setPlaybackSpeed ?? (() => {}),
+		})),
+	)
 
 	const hasSteps = steps.length > 0
 	const hasStarted = currentStep > 0
@@ -41,7 +63,11 @@ export const ExecutionControls = () => {
 	}
 
 	return (
-		<div className="execution-controls">
+		<div
+			className="execution-controls"
+			role="region"
+			aria-label="Execution debugger controls"
+		>
 			<div className="controls-row">
 				<div className="controls-buttons">
 					<button
@@ -49,13 +75,14 @@ export const ExecutionControls = () => {
 						onClick={handlePlayClick}
 						disabled={!hasSteps}
 						className="control-btn-play"
+						aria-label={playLabel}
 					>
 						{isActivelyRunning ? (
-							<Pause size={16} />
+							<Pause size={15} />
 						) : isComplete ? (
-							<RotateCcw size={16} />
+							<RotateCcw size={15} />
 						) : (
-							<Play size={16} />
+							<Play size={15} />
 						)}
 						{playLabel}
 					</button>
@@ -67,7 +94,7 @@ export const ExecutionControls = () => {
 						className="control-btn-step"
 					>
 						Step
-						<ArrowRight size={16} />
+						<ArrowRight size={15} />
 					</button>
 
 					<button
@@ -76,7 +103,7 @@ export const ExecutionControls = () => {
 						disabled={!hasStarted}
 						className="control-btn-back"
 					>
-						<ArrowLeft size={16} />
+						<ArrowLeft size={15} />
 						Back
 					</button>
 
@@ -90,7 +117,33 @@ export const ExecutionControls = () => {
 					</button>
 				</div>
 
-				<div className="status">
+				{/* Playback Speed Controls */}
+				<div
+					className="speed-control-group"
+					role="group"
+					aria-label="Execution playback speed"
+				>
+					<span className="speed-icon-label" title="Playback Speed">
+						<Gauge size={13} aria-hidden="true" />
+						<span className="sr-only">Speed</span>
+					</span>
+					<div className="speed-buttons">
+						{SPEEDS.map((speed) => (
+							<button
+								key={speed}
+								type="button"
+								className={`speed-btn${playbackSpeed === speed ? ' active' : ''}`}
+								onClick={() => setPlaybackSpeed(speed)}
+								aria-pressed={playbackSpeed === speed}
+								title={`${speed}x speed`}
+							>
+								{speed}x
+							</button>
+						))}
+					</div>
+				</div>
+
+				<div className="status" aria-live="polite">
 					{isComplete ? (
 						<>
 							<div
@@ -138,11 +191,15 @@ export const ExecutionControls = () => {
 				</div>
 			</div>
 
-			<div className="progress-track">
-				<div
-					className="progress-fill"
-					style={{ width: `${progressPct}%` }}
-				/>
+			<div
+				className="progress-track"
+				role="progressbar"
+				aria-valuenow={progressPct}
+				aria-valuemin={0}
+				aria-valuemax={100}
+				aria-label="Execution progress"
+			>
+				<div className="progress-fill" style={{ width: `${progressPct}%` }} />
 			</div>
 		</div>
 	)

@@ -91,11 +91,12 @@ const findBlockEndLine = (code: string, startLine: number): number => {
 }
 
 export const CodeEditor = () => {
-	const { code, setCode, currentLine } = useAppStore(
+	const { code, setCode, currentLine, steps } = useAppStore(
 		useShallow((state) => ({
 			code: state.code,
 			setCode: state.setCode,
 			currentLine: state.currentLine,
+			steps: state.steps ?? [],
 		})),
 	)
 
@@ -207,17 +208,33 @@ export const CodeEditor = () => {
 		setError(null)
 	}
 
+	const executionError =
+		steps[0]?.type === 'error' ? steps[0].description : null
+	const displayError = error || executionError
+
 	return (
 		<div className="code-editor">
 			<div className="code-editor-header">
 				<h3>Source &middot; editable</h3>
-				<span className="current-line-indicator">
-					{editing
-						? 'Click Trace this to run your edit'
-						: currentLine
-							? `Executing line ${currentLine}`
-							: 'Click the code to edit it'}
-				</span>
+				<div className="code-editor-header-actions">
+					<span className="current-line-indicator">
+						{editing
+							? 'Click Trace this to run your edit'
+							: currentLine
+								? `Executing line ${currentLine}`
+								: 'Click the code to edit it'}
+					</span>
+					{!editing && (
+						<button
+							type="button"
+							className="btn-edit-code"
+							onClick={() => enterEdit()}
+							aria-label="Edit source code"
+						>
+							Edit
+						</button>
+					)}
+				</div>
 			</div>
 
 			{editing ? (
@@ -294,7 +311,7 @@ export const CodeEditor = () => {
 				</pre>
 			)}
 
-			{error && <div className="code-editor-error">{error}</div>}
+			{displayError && <div className="code-editor-error">{displayError}</div>}
 		</div>
 	)
 }
