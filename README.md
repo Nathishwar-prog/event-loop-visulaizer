@@ -4,10 +4,9 @@ An interactive, browser-based tool that helps developers understand how the Java
 
 ![Event Loop Visualizer Demo](assets/demo-screenshot.png)
 
-[![CI/CD Pipeline](https://github.com/ishanbagchi/event-loop-visualiser/actions/workflows/ci.yml/badge.svg)](https://github.com/ishanbagchi/event-loop-visualiser/actions/workflows/ci.yml)
-[![Deployment Status](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://event-loop-visualiser.ishanbagchi.com)
+[![CI/CD Pipeline](https://github.com/Nathishwar-prog/event-loop-visulaizer/actions/workflows/ci.yml/badge.svg)](https://github.com/Nathishwar-prog/event-loop-visulaizer/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/github/package-json/v/ishanbagchi/event-loop-visualiser)](https://github.com/ishanbagchi/event-loop-visualiser)
+[![Version](https://img.shields.io/github/package-json/v/Nathishwar-prog/event-loop-visulaizer)](https://github.com/Nathishwar-prog/event-loop-visulaizer)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ## 🚀 Features
@@ -50,8 +49,8 @@ The interpreter is a real (but intentionally small) implementation, not a full J
 1. **Clone the repository**
 
     ```bash
-    git clone https://github.com/ishanbagchi/event-loop-visualiser.git
-    cd event-loop-visualiser
+    git clone https://github.com/Nathishwar-prog/event-loop-visulaizer.git
+    cd event-loop-visulaizer
     ```
 
 2. **Install dependencies**

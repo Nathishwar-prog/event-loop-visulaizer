@@ -4,8 +4,8 @@
  * resolution both read from this list, so nothing else needs to change.
  */
 export const THEMES = [
-	{ id: 'dark', label: 'Runtime Gazette · Dark' },
-	{ id: 'light', label: 'Runtime Gazette · Light' },
+	{ id: 'dark', label: 'AsyncLab · Dark' },
+	{ id: 'light', label: 'AsyncLab · Light' },
 ] as const
 
 export type ThemeId = (typeof THEMES)[number]['id']

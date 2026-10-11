@@ -4,34 +4,34 @@
 
 # Global owners - require review for all changes
 
--   @ishanbagchi
+-   @Nathishwar-prog
 
 # GitHub workflows and configuration
 
-/.github/ @ishanbagchi
+/.github/ @Nathishwar-prog
 
 # Core application files
 
-/src/ @ishanbagchi
+/src/ @Nathishwar-prog
 
 # Documentation
 
-\*.md @ishanbagchi
-/docs/ @ishanbagchi
+\*.md @Nathishwar-prog
+/docs/ @Nathishwar-prog
 
 # Configuration files
 
-package.json @ishanbagchi
-package-lock.json @ishanbagchi
-tsconfig.json @ishanbagchi
-vite.config.ts @ishanbagchi
-.eslintrc.\* @ishanbagchi
+package.json @Nathishwar-prog
+package-lock.json @Nathishwar-prog
+tsconfig.json @Nathishwar-prog
+vite.config.ts @Nathishwar-prog
+.eslintrc.\* @Nathishwar-prog
 
 # CI/CD and deployment
 
-/.github/workflows/ @ishanbagchi
+/.github/workflows/ @Nathishwar-prog
 
 # License and contributing guidelines
 
-LICENSE @ishanbagchi
-CONTRIBUTING.md @ishanbagchi
+LICENSE @Nathishwar-prog
+CONTRIBUTING.md @Nathishwar-prog

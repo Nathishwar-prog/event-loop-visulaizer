@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://event-loop-visualiser.ishanbagchi.com/sitemap.xml
+Sitemap: https://nathishwar-prog.github.io/event-loop-visulaizer/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 1

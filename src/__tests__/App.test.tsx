@@ -6,12 +6,8 @@ describe('App Component', () => {
 	it('should render main sections', () => {
 		render(<App />)
 
-		expect(
-			screen.getByRole('heading', { level: 1 }),
-		).toBeInTheDocument()
-		expect(
-			screen.getByText(/stack, Web APIs,/),
-		).toBeInTheDocument()
+		expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
+		expect(screen.getByText(/stack, Web APIs,/)).toBeInTheDocument()
 
 		expect(screen.getByText('Call Stack')).toBeInTheDocument()
 		expect(screen.getByText('Web APIs')).toBeInTheDocument()
@@ -71,5 +67,16 @@ describe('App Component', () => {
 
 		const visualizationGrid = container.querySelector('.visualization-grid')
 		expect(visualizationGrid).toBeInTheDocument()
+	})
+
+	it('should render AsyncLab branding and runtime telemetry panes', () => {
+		render(<App />)
+
+		expect(screen.getByText('AsyncLab Studio')).toBeInTheDocument()
+		expect(
+			screen.getByText('JavaScript Execution & Debugging Studio'),
+		).toBeInTheDocument()
+		expect(screen.getByText('ES2022 Runtime')).toBeInTheDocument()
+		expect(screen.getByText('Microtask Queue')).toBeInTheDocument()
 	})
 })
