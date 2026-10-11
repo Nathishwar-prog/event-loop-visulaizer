@@ -23,12 +23,20 @@ export const CallbackQueue = () => {
 			) : (
 				macrotasks.map((item) => (
 					<div key={item.id} className="queue-item">
-						<div className="item-name">{item.name}</div>
-						{item.lineNumber && (
-							<div className="item-details">
-								Line {item.lineNumber}
-							</div>
-						)}
+						<div className="item-main">
+							<div className="item-name">{item.name}</div>
+							{item.delay != null && (
+								<div className="item-delay">Delay: {item.delay}ms</div>
+							)}
+						</div>
+						<div className="item-meta-col">
+							<span className="item-status-tag tag-queued">Queued</span>
+							{item.lineNumber && (
+								<div className="item-details">
+									Line {item.lineNumber}
+								</div>
+							)}
+						</div>
 					</div>
 				))
 			)}

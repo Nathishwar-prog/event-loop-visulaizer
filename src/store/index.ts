@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { ExecutionState, CodeSample, ConsoleLog } from '../types'
+import type { ExecutionState, ExecutionStep, CodeSample, ConsoleLog } from '../types'
 import { CodeExecutionSimulator } from '../utils/codeSimulator'
 
 interface AppStore extends ExecutionState {
@@ -15,6 +15,7 @@ interface AppStore extends ExecutionState {
 	pause: () => void
 	step: () => void
 	back: () => void
+	goToStep: (step: number) => void
 	reset: () => void
 	setPlaybackSpeed: (speed: number) => void
 	addConsoleLog: (
@@ -286,8 +287,11 @@ export const useAppStore = create<AppStore>((set, get) => {
 
 		setCode: (code: string) => {
 			stopPlayback()
-			const simulator = new CodeExecutionSimulator()
-			const steps = simulator.simulateCode(code)
+			let steps: ExecutionStep[] = []
+			if (code.trim().length > 0) {
+				const simulator = new CodeExecutionSimulator()
+				steps = simulator.simulateCode(code)
+			}
 			set({
 				code,
 				steps,
@@ -324,7 +328,7 @@ export const useAppStore = create<AppStore>((set, get) => {
 		play: () => {
 			const state = get()
 			if (state.currentStep >= state.steps.length) return
-			if (state.isRunning) return
+			if (state.isRunning && !state.isPaused) return
 
 			set({ isRunning: true, isPaused: false })
 
@@ -342,7 +346,12 @@ export const useAppStore = create<AppStore>((set, get) => {
 					return
 				}
 
-				get().step()
+				const nextStep = currentState.currentStep + 1
+				applyToStep(nextStep)
+				if (nextStep >= currentState.steps.length) {
+					stopPlayback()
+					set({ isRunning: false })
+				}
 			}, intervalMs)
 		},
 
@@ -364,7 +373,12 @@ export const useAppStore = create<AppStore>((set, get) => {
 						set({ isRunning: false })
 						return
 					}
-					get().step()
+					const nextStep = currentState.currentStep + 1
+					applyToStep(nextStep)
+					if (nextStep >= currentState.steps.length) {
+						stopPlayback()
+						set({ isRunning: false })
+					}
 				}, intervalMs)
 			}
 		},
@@ -375,15 +389,28 @@ export const useAppStore = create<AppStore>((set, get) => {
 		},
 
 		step: () => {
+			stopPlayback()
 			const state = get()
-			if (state.currentStep >= state.steps.length) return
+			if (state.currentStep >= state.steps.length) {
+				set({ isRunning: false })
+				return
+			}
 			applyToStep(state.currentStep + 1)
+			set({ isRunning: false, isPaused: false })
 		},
 
 		back: () => {
 			stopPlayback()
 			const state = get()
 			applyToStep(Math.max(0, state.currentStep - 1))
+			set({ isRunning: false, isPaused: false })
+		},
+
+		goToStep: (target: number) => {
+			stopPlayback()
+			const state = get()
+			const clamped = Math.max(0, Math.min(target, state.steps.length))
+			applyToStep(clamped)
 			set({ isRunning: false, isPaused: false })
 		},
 

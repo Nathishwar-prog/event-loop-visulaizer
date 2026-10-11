@@ -8,6 +8,7 @@ import { CallbackQueue } from './components/CallbackQueue'
 import { MicrotaskQueue } from './components/MicrotaskQueue'
 import { WebAPIs } from './components/WebAPIs'
 import { SampleSelector } from './components/SampleSelector'
+import { StepTimeline } from './components/StepTimeline'
 import { ExplanationPanel } from './components/ExplanationPanel'
 import { Console } from './components/Console'
 import { EventLoopNotes } from './components/EventLoopNotes'
@@ -77,6 +78,7 @@ function App() {
 					>
 						<SampleSelector />
 						<ExecutionControls />
+						<StepTimeline />
 						<CodeEditor />
 						<ExplanationPanel />
 					</div>

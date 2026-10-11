@@ -23,12 +23,19 @@ export const MicrotaskQueue = () => {
 			) : (
 				microtasks.map((item) => (
 					<div key={item.id} className="microtask-item">
-						<div className="item-name">{item.name}</div>
-						{item.lineNumber && (
-							<div className="item-details">
-								Line {item.lineNumber}
-							</div>
-						)}
+						<div className="item-main">
+							<div className="item-name">{item.name}</div>
+						</div>
+						<div className="item-meta-col">
+							<span className="item-status-tag tag-microtask">
+								Microtask
+							</span>
+							{item.lineNumber && (
+								<div className="item-details">
+									Line {item.lineNumber}
+								</div>
+							)}
+						</div>
 					</div>
 				))
 			)}

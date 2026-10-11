@@ -21,16 +21,38 @@ export const CallStack = () => {
 					</p>
 				</div>
 			) : (
-				frames.map((item) => (
-					<div key={item.id} className="stack-item">
-						<div className="item-name">{item.name}</div>
-						{item.lineNumber && (
-							<div className="item-details">
-								Line {item.lineNumber}
+				frames.map((item, index) => {
+					const isTop = index === 0
+					return (
+						<div
+							key={item.id}
+							className={`stack-item${isTop ? ' active' : ''}`}
+						>
+							<div className="item-main">
+								<div className="item-name">{item.name}</div>
+								{item.args && item.args.length > 0 && (
+									<div className="item-args">
+										({item.args.map((a) => String(a)).join(', ')})
+									</div>
+								)}
 							</div>
-						)}
-					</div>
-				))
+							<div className="item-meta-col">
+								<span
+									className={`item-status-tag ${
+										isTop ? 'tag-executing' : 'tag-waiting'
+									}`}
+								>
+									{isTop ? 'Executing' : 'Caller'}
+								</span>
+								{item.lineNumber && (
+									<div className="item-details">
+										Line {item.lineNumber}
+									</div>
+								)}
+							</div>
+						</div>
+					)
+				})
 			)}
 		</PaneShell>
 	)

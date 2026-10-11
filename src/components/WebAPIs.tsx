@@ -22,12 +22,24 @@ export const WebAPIs = () => {
 			) : (
 				webAPIs.map((item) => (
 					<div key={item.id} className="api-item">
-						<div className="item-name">{item.name}</div>
-						{item.lineNumber && (
-							<div className="item-details">
-								Line {item.lineNumber}
-							</div>
-						)}
+						<div className="item-main">
+							<div className="item-name">{item.name}</div>
+							{item.timeRemaining != null && (
+								<div className="item-delay">
+									Timer: {item.timeRemaining}ms
+								</div>
+							)}
+						</div>
+						<div className="item-meta-col">
+							<span className="item-status-tag tag-webapi">
+								Off-thread
+							</span>
+							{item.lineNumber && (
+								<div className="item-details">
+									Line {item.lineNumber}
+								</div>
+							)}
+						</div>
 					</div>
 				))
 			)}
