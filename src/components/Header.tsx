@@ -11,7 +11,7 @@ export function Header() {
 						<span>One thread &middot; Two queues</span>
 						<ThemeToggle />
 						<a
-							href="https://github.com/ishanbagchi/event-loop-visualiser"
+							href="https://github.com/Nathishwar-prog/event-loop-visulaizer"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="github-link"

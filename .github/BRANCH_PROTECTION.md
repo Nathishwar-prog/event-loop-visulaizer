@@ -164,7 +164,7 @@ git push origin fix/accidental-push
 
 -   🐛 **Bug Reports**: Use issue templates
 -   💬 **Questions**: GitHub Discussions
--   🔧 **Technical Issues**: Contact @ishanbagchi
+-   🔧 **Technical Issues**: Contact @Nathishwar-prog
 
 ## 🔄 Updating Protection Rules
 

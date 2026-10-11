@@ -16,7 +16,7 @@ export const Footer = () => {
 					</a>
 					<span className="footer-separator">•</span>
 					<a
-						href="https://github.com/ishanbagchi/event-loop-visualiser"
+						href="https://github.com/Nathishwar-prog/event-loop-visulaizer"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="footer-link"
