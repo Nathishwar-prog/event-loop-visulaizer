@@ -78,6 +78,17 @@ describe('App Store', () => {
 			expect(logs[0].type).toBe('info')
 			expect(logs[0].timestamp).toBeDefined()
 		})
+
+		it('should manage playback speed correctly', () => {
+			const store = useAppStore.getState()
+			expect(store.playbackSpeed).toBe(1)
+
+			store.setPlaybackSpeed(2)
+			expect(useAppStore.getState().playbackSpeed).toBe(2)
+
+			store.reset()
+			expect(useAppStore.getState().playbackSpeed).toBe(2)
+		})
 	})
 
 	describe('Sample Categories', () => {

@@ -21,10 +21,9 @@ const mockStore = {
 }
 
 const mockUseAppStoreState = (state: Record<string, unknown>) => {
-	vi.mocked(useAppStore).mockImplementation(
-		((selector?: (s: Record<string, unknown>) => unknown) =>
-			selector ? selector(state) : state) as typeof useAppStore,
-	)
+	vi.mocked(useAppStore).mockImplementation(((
+		selector?: (s: Record<string, unknown>) => unknown,
+	) => (selector ? selector(state) : state)) as typeof useAppStore)
 }
 
 describe('ExecutionControls', () => {
@@ -142,17 +141,14 @@ describe('ExecutionControls', () => {
 		it('should show the play button labelled Pause when running', () => {
 			render(<ExecutionControls />)
 
-			expect(
-				screen.getByRole('button', { name: /pause/i }),
-			).toBeInTheDocument()
+			expect(screen.getByRole('button', { name: /pause/i })).toBeInTheDocument()
 		})
 
 		it('should show running status indicator with proper class', () => {
 			render(<ExecutionControls />)
 
 			const statusDiv = screen.getByText('Running').parentElement
-			const statusIndicator =
-				statusDiv?.querySelector('.status-indicator')
+			const statusIndicator = statusDiv?.querySelector('.status-indicator')
 			expect(statusIndicator).toHaveClass('status-indicator')
 			expect(statusIndicator).toHaveClass('running')
 		})
@@ -188,17 +184,14 @@ describe('ExecutionControls', () => {
 		it('should show the play button labelled Play when paused', () => {
 			render(<ExecutionControls />)
 
-			expect(
-				screen.getByRole('button', { name: /play/i }),
-			).toBeInTheDocument()
+			expect(screen.getByRole('button', { name: /play/i })).toBeInTheDocument()
 		})
 
 		it('should show paused status indicator with proper class', () => {
 			render(<ExecutionControls />)
 
 			const statusDiv = screen.getByText('Paused').parentElement
-			const statusIndicator =
-				statusDiv?.querySelector('.status-indicator')
+			const statusIndicator = statusDiv?.querySelector('.status-indicator')
 			expect(statusIndicator).toHaveClass('status-indicator')
 			expect(statusIndicator).toHaveClass('paused')
 		})
@@ -269,9 +262,7 @@ describe('ExecutionControls', () => {
 		it('should disable the step button but keep Replay enabled when execution is complete', () => {
 			render(<ExecutionControls />)
 
-			expect(
-				screen.getByRole('button', { name: /replay/i }),
-			).toBeEnabled()
+			expect(screen.getByRole('button', { name: /replay/i })).toBeEnabled()
 			expect(screen.getByRole('button', { name: /step/i })).toBeDisabled()
 		})
 
@@ -286,10 +277,8 @@ describe('ExecutionControls', () => {
 		it('should show complete status indicator with green background', () => {
 			render(<ExecutionControls />)
 
-			const statusDiv =
-				screen.getByText('Execution Complete').parentElement
-			const statusIndicator =
-				statusDiv?.querySelector('.status-indicator')
+			const statusDiv = screen.getByText('Execution Complete').parentElement
+			const statusIndicator = statusDiv?.querySelector('.status-indicator')
 			expect(statusIndicator).toHaveStyle('background-color: #10b981')
 		})
 	})
@@ -407,8 +396,7 @@ describe('ExecutionControls', () => {
 			render(<ExecutionControls />)
 
 			const statusDiv = screen.getByText('Ready to Start').parentElement
-			const statusIndicator =
-				statusDiv?.querySelector('.status-indicator')
+			const statusIndicator = statusDiv?.querySelector('.status-indicator')
 			expect(statusIndicator).toHaveStyle('background-color: #3b82f6')
 		})
 
@@ -433,8 +421,7 @@ describe('ExecutionControls', () => {
 			render(<ExecutionControls />)
 
 			const statusDiv = screen.getByText('Stopped').parentElement
-			const statusIndicator =
-				statusDiv?.querySelector('.status-indicator')
+			const statusIndicator = statusDiv?.querySelector('.status-indicator')
 			expect(statusIndicator).toHaveStyle('background-color: #f59e0b')
 		})
 
@@ -448,8 +435,7 @@ describe('ExecutionControls', () => {
 			render(<ExecutionControls />)
 
 			const statusDiv = screen.getByText('No Code Loaded').parentElement
-			const statusIndicator =
-				statusDiv?.querySelector('.status-indicator')
+			const statusIndicator = statusDiv?.querySelector('.status-indicator')
 			expect(statusIndicator).toHaveStyle('background-color: #6b7280')
 		})
 	})
@@ -491,6 +477,29 @@ describe('ExecutionControls', () => {
 
 			const fill = container.querySelector('.progress-fill')
 			expect(fill).toHaveStyle('width: 0%')
+		})
+	})
+
+	describe('Playback Speed Controls', () => {
+		it('should render playback speed buttons and handle changes', async () => {
+			const setPlaybackSpeed = vi.fn()
+			mockUseAppStoreState({
+				...mockStore,
+				playbackSpeed: 1,
+				setPlaybackSpeed,
+			})
+
+			render(<ExecutionControls />)
+
+			expect(screen.getByRole('button', { name: '0.5x' })).toBeInTheDocument()
+			expect(screen.getByRole('button', { name: '1x' })).toHaveClass('active')
+			expect(screen.getByRole('button', { name: '1.5x' })).toBeInTheDocument()
+			expect(screen.getByRole('button', { name: '2x' })).toBeInTheDocument()
+
+			const user = userEvent.setup()
+			await user.click(screen.getByRole('button', { name: '2x' }))
+
+			expect(setPlaybackSpeed).toHaveBeenCalledWith(2)
 		})
 	})
 })
